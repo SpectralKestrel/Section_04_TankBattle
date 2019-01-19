@@ -2,6 +2,8 @@
 
 #include "Projectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Classes/Particles/ParticleSystemComponent.h"
+#include "Classes/Components/StaticMeshComponent.h"
 #include "Engine/World.h"
 
 
@@ -12,6 +14,13 @@ AProjectile::AProjectile()
 	PrimaryActorTick.bCanEverTick = true;
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement Component"));
 	ProjectileMovementComponent->bAutoActivate=false;
+	CollisionMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh"));
+	SetRootComponent(CollisionMesh);
+	CollisionMesh->SetNotifyRigidBodyCollision(true);
+	CollisionMesh->SetVisibility(false);
+
+	Launchblast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
+	Launchblast->AttachTo(RootComponent);
 }
 
 // Called when the game starts or when spawned
