@@ -2,6 +2,9 @@
 
 #include "SpawnPoint.h"
 #include "Classes/Components/SceneComponent.h"
+#include "Classes/Kismet/GameplayStatics.h"
+#include "Classes/GameFramework/Actor.h"
+#include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
 
 // Sets default values for this component's properties
@@ -14,15 +17,17 @@ USpawnPoint::USpawnPoint()
 	// ...
 }
 
+AActor* USpawnPoint::GetSpawnedActor() const {return SpawnedActor; }
 
 // Called when the game starts
 void USpawnPoint::BeginPlay()
 {
 	Super::BeginPlay();
-
-	auto NewActor = GetWorld()->SpawnActor<AActor>(SpawnClass);
-	if (!NewActor) { return; };
-	AttachToComponent(this, FAttachmentTransformRules::KeepRelativeTransform);
+	
+	SpawnedActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnClass, GetComponentTransform());
+	if (!SpawnedActor) { return; };
+	SpawnedActor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
+	UGameplayStatics::FinishSpawningActor(SpawnedActor, GetComponentTransform());
 	
 }
 
