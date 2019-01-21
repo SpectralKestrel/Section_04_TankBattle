@@ -31,6 +31,7 @@ protected:
 private:	
 
 	UProjectileMovementComponent* ProjectileMovementComponent = nullptr;
+
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* CollisionMesh = nullptr;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
